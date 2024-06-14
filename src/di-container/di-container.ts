@@ -302,9 +302,6 @@ export class DIContainer implements IDIContainer {
         instance = (constructable as unknown as CallableFunction)(
           ...instanceArgs
         );
-        instance = (constructable as unknown as CallableFunction)(
-          ...instanceArgs
-        );
       }
     }
 
