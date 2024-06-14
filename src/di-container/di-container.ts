@@ -296,14 +296,9 @@ export class DIContainer implements IDIContainer {
         }
         const constructable = registrationRecord.implementation;
         // Try without 'new' and call the implementation as a function.
-        try {
-          instance = (constructable as unknown as CallableFunction)(
-            ...instanceArgs
-          );
-        } catch {
-          // throw the original error, as it is likely more descriptive than this alternative attempt
-          throw ex;
-        }
+        instance = (constructable as unknown as CallableFunction)(
+          ...instanceArgs
+        );
       }
     }
 
