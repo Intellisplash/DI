@@ -173,6 +173,9 @@ export class DIContainer implements IDIContainer {
         : [];
     this.constructorArguments.set(options.identifier, implementationArguments);
 
+    // clear this identifier from the instance cache to allow for instantiation of re-registered singletons
+    this.clearInstance(options.identifier);
+
     this.serviceRegistry.set(
       options.identifier,
       "implementation" in options && options.implementation != null
@@ -194,6 +197,13 @@ export class DIContainer implements IDIContainer {
   private getInstance<T>(identifier: string): T | null {
     const instance = this.instances.get(identifier);
     return instance == null ? null : <T>instance;
+  }
+
+  /**
+   * Removes the instance associated with the given identifier from the cache.
+   */
+  private clearInstance(identifier: string): void {
+    this.instances.delete(identifier);
   }
 
   /**
