@@ -185,7 +185,7 @@ export class DIContainer implements IDIContainer {
    * Removes the instance associated with the given identifier from the cache.
    */
   private clearInstance(identifier: string): void {
-    this.instances.delete(identifier);
+    this.diContainerMaps.instances.delete(identifier);
   }
 
   /**
