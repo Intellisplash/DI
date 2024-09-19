@@ -90,6 +90,10 @@ declare class DIContainer implements IDIContainer {
      */
     private getInstance;
     /**
+     * Removes the instance associated with the given identifier from the cache.
+     */
+    private clearInstance;
+    /**
      * Gets an IRegistrationRecord associated with the given identifier.
      */
     private getRegistrationRecord;

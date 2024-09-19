@@ -64,6 +64,8 @@ class DIContainer {
             ? options.implementation[CONSTRUCTOR_ARGUMENTS_SYMBOL]
             : [];
         this.diContainerMaps.constructorArguments.set(options.identifier, implementationArguments);
+        // clear this identifier from the instance cache to allow for instantiation of re-registered singletons
+        this.clearInstance(options.identifier);
         this.diContainerMaps.serviceRegistry.set(options.identifier, "implementation" in options && options.implementation != null
             ? { ...options, kind }
             : { ...options, kind, newExpression: newExpression });
@@ -80,6 +82,12 @@ class DIContainer {
     getInstance(identifier) {
         const instance = this.diContainerMaps.instances.get(identifier);
         return instance == null ? null : instance;
+    }
+    /**
+     * Removes the instance associated with the given identifier from the cache.
+     */
+    clearInstance(identifier) {
+        this.diContainerMaps.instances.delete(identifier);
     }
     /**
      * Gets an IRegistrationRecord associated with the given identifier.
@@ -166,6 +174,9 @@ class DIContainer {
             catch (ex) {
                 if (registrationRecord.implementation == null) {
                     throw new ReferenceError(`${this.constructor.name} could not construct a new service of kind: ${identifier}. Reason: No implementation was given!`);
+                }
+                if (!(ex instanceof TypeError)) {
+                    throw ex;
                 }
                 const constructable = registrationRecord.implementation;
                 // Try without 'new' and call the implementation as a function.
